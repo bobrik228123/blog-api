@@ -5,8 +5,9 @@ class UserCreate(BaseModel):
     email: str
     password: str
 
+
 class UserResponse(BaseModel):
-    #add id in future
+    id: int
     email: str
 
 
