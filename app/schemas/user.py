@@ -11,5 +11,11 @@ class UserResponse(BaseModel):
     email: str
 
 
+class UserUpdate(BaseModel):
+    email: str | None = None
+    password: str | None = None
+    
+
+
 
 
