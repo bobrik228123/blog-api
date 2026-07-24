@@ -1,172 +1,145 @@
-# \# Blog API
+# Blog API
 
-# 
+A REST API for a blog built with FastAPI, PostgreSQL and SQLAlchemy.  
+This project was created for learning backend development and REST API design.
 
-# Backend learning project built with FastAPI.
+---
 
-# 
+## Technologies
 
-# \## Technologies
+- Python
+- FastAPI
+- PostgreSQL
+- SQLAlchemy
+- Pydantic
+- JWT Authentication
+- Passlib (Password Hashing)
+- OAuth2
+- Uvicorn
+- Git
+- GitHub
 
-# 
+---
 
-# \- Python
+## Features
 
-# \- FastAPI
+- User registration
+- User login
+- JWT Authentication
+- Password hashing with bcrypt
+- OAuth2 authentication
+- Protected routes
+- Get current authenticated user
+- PostgreSQL database integration
+- SQLAlchemy ORM
+- Environment variables with `.env`
+- Automatic database table creation
+- Interactive Swagger API documentation
+
+---
 
-# \- PostgreSQL
+## Installation (Windows)
 
-# \- SQLAlchemy
+### 1. Clone the repository
 
-# \- JWT Authentication
+```bash
+git clone https://github.com/bobrik228123/blog-api.git
+cd blog-api
+```
 
-# \- Git
+### 2. Create a virtual environment
 
-# \- GitHub
+```bash
+python -m venv .venv
+```
 
-# 
+### 3. Activate the virtual environment
 
-# \## Features
+```bash
+.venv\Scripts\activate
+```
 
-# 
+### 4. Install dependencies
 
-# \- User registration
+```bash
+pip install -r requirements.txt
+```
 
-# \- Login with JWT
+### 5. Create a PostgreSQL database
 
-# \- Password hashing
+Open **pgAdmin** and create a new database named:
 
-# \- Protected routes
+```text
+blog_api
+```
 
-# 
+### 6. Create a `.env` file
 
-# \## Installation (Windows)
+```env
+DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost/blog_api
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
 
-# 
+Replace `YOUR_PASSWORD` with your PostgreSQL password.
 
-# \### 1. Clone repository
+### 7. Run the project
 
-# 
+```bash
+uvicorn app.main:app --reload
+```
 
-# ```bash
+The database tables will be created automatically when the application starts for the first time.
 
-# git clone https://github.com/bobrik228123/blog-api.git
+---
 
-# cd blog-api
+## API Documentation
 
-# ```
+After starting the server, open:
 
-# 
-
-# \### 2. Create virtual environment
-
-# 
-
-# ```bash
-
-# python -m venv .venv
-
-# ```
-
-# 
-
-# \### 3. Activate virtual environment
-
-# 
-
-# ```bash
-
-# .venv\\Scripts\\activate
-
-# ```
-
-# 
-
-# \### 4. Install dependencies
-
-# 
-
-# ```bash
-
-# pip install -r requirements.txt
-
-# ```
-
-# 
-
-# \### 5. Create PostgreSQL database
-
-# 
-
-# Create a new database in pgAdmin named:
-
-# 
-
-# ```text
-
-# blog\_api
-
-# ```
-
-# 
-
-# \### 6. Create `.env` file
-
-# 
-
-# ```env
-
-# DATABASE\_URL=postgresql://postgres:YOUR\_PASSWORD@localhost/blog\_api
-
-# SECRET\_KEY=your\_secret\_key
-
-# ALGORITHM=HS256
-
-# ACCESS\_TOKEN\_EXPIRE\_MINUTES=30
-
-# ```
-
-# 
-
-# Replace `YOUR\_PASSWORD` with your PostgreSQL password.
-
-# 
-
-# \### 7. Start the server
-
-# 
-
-# ```bash
-
-# uvicorn app.main:app --reload
-
-# ```
-
-# 
-
-# The tables will be created automatically when the application starts.
-
-# 
-
-# \## API Documentation
-
-# 
-
-# Swagger UI:
-
-# 
-
-# ```text
-
-# http://127.0.0.1:8000/docs
-
-# ```
-
-# 
-
-# \## Author
-
-# 
-
-# Nazar Kuznetsov
-
+```text
+http://127.0.0.1:8000/docs
+```
+
+Swagger UI allows you to test every endpoint directly from the browser.
+
+---
+
+## Project Structure
+
+```text
+blog-api/
+│
+├── app/
+│   ├── core/
+│   │   └── security.py
+│   │
+│   ├── models/
+│   │   ├── post.py
+│   │   └── user.py
+│   │
+│   ├── routers/
+│   │   ├── auth.py
+│   │   ├── posts.py
+│   │   └── users.py
+│   │
+│   ├── schemas/
+│   │   └── user.py
+│   │
+│   ├── database.py
+│   └── main.py
+│
+├── .env
+├── .gitignore
+├── README.md
+└── requirements.txt
+```
+
+---
+
+## Author
+
+**Nazar Kuznetsov**
+
+GitHub: https://github.com/bobrik228123
