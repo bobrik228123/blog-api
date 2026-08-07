@@ -11,3 +11,7 @@ class PostResponse(BaseModel):
     title: str
     content: str
     user_id: int
+
+class PostUpdate(BaseModel):
+    title: str | None = None
+    content: str | None = None
