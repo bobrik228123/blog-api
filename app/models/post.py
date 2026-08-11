@@ -10,6 +10,8 @@ class Post(Base):
     content = Column(String,nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-
     owner = relationship("User", back_populates="posts")
+    comments = relationship("Comment", back_populates="post")
+
+
 

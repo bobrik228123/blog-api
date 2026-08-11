@@ -10,4 +10,5 @@ class User(Base):
     password_hash = Column(String, nullable=False)
 
     posts = relationship("Post", back_populates="owner")
+    comments = relationship("Comment", back_populates="user")
 

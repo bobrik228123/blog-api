@@ -8,7 +8,6 @@ from fastapi import HTTPException, Depends
 from app.models.user import User
 from app.database import get_db
 from sqlalchemy.orm import Session
-from app.schemas.user import UserResponse
 
 load_dotenv()
 
