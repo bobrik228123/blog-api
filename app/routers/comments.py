@@ -32,10 +32,12 @@ def get_comments_by_post(post_id : int, db: Session = Depends(get_db)):
     return db_post.comments
 
 @router.patch("/comments/{comment_id}", response_model=CommentResponse)
-def update_comment(comment_id: int, comment_update: CommentUpdate, db: Session = Depends(get_db)):
+def update_comment(comment_id: int, comment_update: CommentUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     db_comment = db.query(Comment).filter(Comment.id == comment_id).first()
     if not db_comment:
         raise HTTPException(status_code=404, detail="Comment not found")
+    if db_comment.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
     db_comment.content = comment_update.content
     db.commit()
     db.refresh(db_comment)
