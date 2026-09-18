@@ -1,5 +1,8 @@
+from operator import or_
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from app.schemas.post import PostCreate, PostResponse, PostUpdate
 from app.database import get_db
 from app.core.security import get_current_user
@@ -20,9 +23,14 @@ def create_post(post: PostCreate, db: Session = Depends(get_db),
 
 
 @router.get("/", response_model=list[PostResponse])
-def get_all_posts(skip: int = Query(0, ge=0,), limit: int = Query(10, le=100, gt=0), db: Session = Depends(get_db),):
+def get_all_posts(skip: int = Query(0, ge=0,), limit: int = Query(10, le=100, gt=0), search: str = Query(""), db: Session = Depends(get_db),):
+    data = db.query(Post).where(or_(
+        Post.title.ilike(f"%{search}%"),
+        Post.content.ilike(f"%{search}%")
+        )
+    )
 
-    return db.query(Post).offset(skip).limit(limit).all()
+    return data.offset(skip).limit(limit).all()
 
 
 
