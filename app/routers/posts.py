@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.schemas.post import PostCreate, PostResponse, PostUpdate
 from app.database import get_db
@@ -20,9 +20,7 @@ def create_post(post: PostCreate, db: Session = Depends(get_db),
 
 
 @router.get("/", response_model=list[PostResponse])
-def get_all_posts(skip : int = 0, limit : int = 10, db: Session = Depends(get_db),):
-    if skip < 0 or limit > 100 or limit <= 0:
-        raise HTTPException(status_code=422, detail="incorrect query parameter")
+def get_all_posts(skip: int = Query(0, ge=0,), limit: int = Query(10, le=100, gt=0), db: Session = Depends(get_db),):
 
     return db.query(Post).offset(skip).limit(limit).all()
 
