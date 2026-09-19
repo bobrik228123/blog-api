@@ -1,4 +1,4 @@
-from operator import or_
+
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -23,14 +23,27 @@ def create_post(post: PostCreate, db: Session = Depends(get_db),
 
 
 @router.get("/", response_model=list[PostResponse])
-def get_all_posts(skip: int = Query(0, ge=0,), limit: int = Query(10, le=100, gt=0), search: str = Query(""), db: Session = Depends(get_db),):
+def get_all_posts(skip: int = Query(0, ge=0,),
+                  limit: int = Query(10, le=100, gt=0),
+                  search: str = Query(""),
+                  sort: str = "newest",
+                  db: Session = Depends(get_db),):
+
     data = db.query(Post).where(or_(
         Post.title.ilike(f"%{search}%"),
         Post.content.ilike(f"%{search}%")
         )
     )
 
-    return data.offset(skip).limit(limit).all()
+    if sort == "newest":
+        data = data.order_by(Post.id.desc())
+    elif sort == "oldest":
+        data = data.order_by(Post.id.asc())
+    else:
+        raise HTTPException(status_code=400, detail="Sort not supported")
+    data = data.offset(skip).limit(limit).all()
+
+    return data
 
 
 
