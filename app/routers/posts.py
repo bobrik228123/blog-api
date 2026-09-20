@@ -8,6 +8,7 @@ from app.database import get_db
 from app.core.security import get_current_user
 from app.models.post import Post
 from app.models.user import User
+from app.enums.SortOrder import SortOrder
 
 
 router = APIRouter(prefix="/post", tags=["Posts"])
@@ -26,7 +27,7 @@ def create_post(post: PostCreate, db: Session = Depends(get_db),
 def get_all_posts(skip: int = Query(0, ge=0,),
                   limit: int = Query(10, le=100, gt=0),
                   search: str = Query(""),
-                  sort: str = "newest",
+                  sort: SortOrder = SortOrder.NEWEST,
                   db: Session = Depends(get_db),):
 
     data = db.query(Post).where(or_(
@@ -35,12 +36,11 @@ def get_all_posts(skip: int = Query(0, ge=0,),
         )
     )
 
-    if sort == "newest":
+    if sort == SortOrder.NEWEST:
         data = data.order_by(Post.id.desc())
-    elif sort == "oldest":
+    elif sort == SortOrder.OLDEST:
         data = data.order_by(Post.id.asc())
-    else:
-        raise HTTPException(status_code=400, detail="Sort not supported")
+    
     data = data.offset(skip).limit(limit).all()
 
     return data
