@@ -23,27 +23,6 @@ def create_post(post: PostCreate, db: Session = Depends(get_db),
     return db_post
 
 
-@router.get("/", response_model=list[PostResponse])
-def get_all_posts(skip: int = Query(0, ge=0,),
-                  limit: int = Query(10, le=100, gt=0),
-                  search: str = Query(""),
-                  sort: SortOrder = SortOrder.NEWEST,
-                  db: Session = Depends(get_db),):
-
-    data = db.query(Post).where(or_(
-        Post.title.ilike(f"%{search}%"),
-        Post.content.ilike(f"%{search}%")
-        )
-    )
-
-    if sort == SortOrder.NEWEST:
-        data = data.order_by(Post.id.desc())
-    elif sort == SortOrder.OLDEST:
-        data = data.order_by(Post.id.asc())
-    
-    data = data.offset(skip).limit(limit).all()
-
-    return data
 
 
 
