@@ -9,7 +9,7 @@ from app.routers.comments import router as comments_router
 
 
 app = FastAPI()
-Base.metadata.create_all(bind=engine)
+#Base.metadata.create_all(bind=engine) database schema is controlled by alembic now
 app.include_router(users_router)
 app.include_router(auth_router)
 app.include_router(posts_router)
