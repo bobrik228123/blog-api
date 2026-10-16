@@ -16,7 +16,7 @@ router = APIRouter(
 
 @router.post("/", response_model=LikeResponse)
 def like( post_id : int , db: Session = Depends(get_db), current_user: User = Depends(get_current_user), ):
-    db_post = db.query(Post).where(Post.id == post_id).first()
+    db_post = db.query(Post).where(Post.id == post_id).first() #check if the post exists
     if db_post is None:
         raise HTTPException(status_code=404, detail="Post not found")
 
@@ -35,4 +35,25 @@ def like( post_id : int , db: Session = Depends(get_db), current_user: User = De
 
 
     return db_like
+
+@router.delete("/{post_id}")
+def delete_like(post_id : int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    db_post = db.query(Post).where(Post.id == post_id).first() #check if the post exists
+    if db_post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+    existing_like = db.query(Likes).where(Likes.post_id == post_id, Likes.user_id == current_user.id).first()
+    if existing_like is None:
+        raise HTTPException(status_code=404, detail="Like not found")
+    db.delete(existing_like)
+    db.commit()
+    return {"message": "Like deleted"}
+
+@router.get("/{post_id}")
+def get_likes_count_from_post(post_id : int, db: Session = Depends(get_db)):
+    db_post = db.query(Post).where(Post.id == post_id).first()  # check if the post exists
+    if db_post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+    likes = db.query(Likes).where(Likes.post_id == post_id).count()
+    return {"post_id": post_id, "likes_count": likes}
+
 
