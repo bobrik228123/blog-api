@@ -31,7 +31,7 @@ def like( post_id : int , db: Session = Depends(get_db), current_user: User = De
         db.refresh(db_like)
     except IntegrityError:
         db.rollback()
-        raise HTTPException(status_code=409, detail="You cannot like this post the second time")
+        raise HTTPException(status_code=409, detail="integrity error")
 
 
     return db_like
