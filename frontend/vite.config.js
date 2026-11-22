@@ -1,0 +1,16 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/post': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+      '/auth': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+      '/users': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+      '/posts': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+      '/comments': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+      '/like': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+    },
+  },
+})
