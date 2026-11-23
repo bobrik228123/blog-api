@@ -14,6 +14,17 @@ router = APIRouter(
     tags=["Likes"],
 )
 
+
+@router.get("/{post_id}/me")
+def post_like_check_me(post_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    db_post = db.query(Post).where(Post.id == post_id).first()
+    if db_post is None:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    like = db.query(Likes).where(Likes.post_id == post_id, Likes.user_id == current_user.id).first()
+    return {"post_id": post_id, "liked": like is not None}
+
+
 @router.post("/", response_model=LikeResponse)
 def like( post_id : int , db: Session = Depends(get_db), current_user: User = Depends(get_current_user), ):
     db_post = db.query(Post).where(Post.id == post_id).first() #check if the post exists
